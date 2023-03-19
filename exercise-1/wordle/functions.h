@@ -2,6 +2,7 @@
 #define FUNCTIONS_H
 
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <vector>
 #include <cctype>
@@ -16,9 +17,40 @@
 
 using namespace std;
 
+
+int timesPlayed;
+int averageAttempts;
+float winPercentage;
+int currentStreak;
+int longestStreak;
+float wins;
+int guessesTotal;
+
+void readStatsFromFile(int& timesPlayed, int& averageAttempts, float& winPercentage, int& currentStreak, int& longestStreak, float& wins, int& guessesTotal) {
+    ifstream infile("stats.txt");
+    if (infile) {
+        infile >> timesPlayed >> averageAttempts >> winPercentage >> currentStreak >> longestStreak >> wins;
+        infile.close();
+    }
+}
+
+void updateStatsFile(int timesPlayed, int averageAttempts, float winPercentage, int currentStreak, int longestStreak, float wins, int guessesTotal){
+    ofstream outfile("stats.txt");
+    if (outfile) {
+        outfile << timesPlayed << endl;
+        outfile << averageAttempts << endl;
+        outfile << winPercentage << endl;
+        outfile << currentStreak << endl;
+        outfile << longestStreak << endl;
+        outfile << wins << endl;
+        outfile.close();
+    }
+}
+
+
 void displayMenu() {
     cout << "=========================" << endl;
-    cout << "WELCOME TO WORDLE" << endl; 
+    cout << "    WELCOME TO WORDLE    " << endl; 
     cout << "=========================" << endl;
     cout << "1. Play Wordle" << endl;
     cout << "2. How to Play" << endl;
@@ -97,9 +129,11 @@ bool guessCheck(string word) {
 }
 
 void wordleMain() {
+    readStatsFromFile(timesPlayed, averageAttempts, winPercentage, currentStreak, longestStreak, wins, guessesTotal);
+    timesPlayed++;
     system("clear");
     string answer = randomWord();
-
+    cout << answer << endl;
     string guess;
     while(guess.length() != 5) {
         cout << "Enter Your Guess: ";
@@ -111,7 +145,7 @@ void wordleMain() {
     vector<char> vAnswer;
     vector<string> colors = {GREY, GREY, GREY, GREY, GREY};
 
-    vector<vector<char>> guesses;
+vector<vector<char>> guesses;
     vector<vector<string>> vColors;
 
     for (int i = 0; i < answer.length(); i++) {
@@ -126,13 +160,6 @@ void wordleMain() {
         }
 
         guesses.push_back(vGuess);
-
-        for (int g = 0; g < vAnswer.size(); g++) {
-            if (vGuess[g] == vAnswer[g]) {
-                colors[g] = GREEN;
-            }
-        }
-
         for (int y = 0; y < vAnswer.size(); y++) {
             for (int x = 0; x < vAnswer.size(); x++) {
                 if (x != y && vGuess[y]==vAnswer[x]) {
@@ -140,6 +167,14 @@ void wordleMain() {
                 }
             }
         }
+        
+        for (int g = 0; g < vAnswer.size(); g++) {
+            if (vGuess[g] == vAnswer[g]) {
+                colors[g] = GREEN;
+            }
+        }
+
+
         vColors.push_back(colors);
         for (int i = 0; i < guesses.size(); i++) {
             cout << vColors[i][0] << " --- " << vColors[i][1] << " --- " << vColors[i][2] << " --- " << vColors[i][3] << " --- " << vColors[i][4] << " --- " << RESET << endl;
@@ -171,11 +206,6 @@ void wordleMain() {
             vGuess.push_back(guess[i]);
     }
 
-    for (int g = 0; g < vAnswer.size(); g++) {
-        if (vGuess[g] == vAnswer[g]) {
-            colors[g] = GREEN;
-        }
-    }
 
     for (int y = 0; y < vAnswer.size(); y++) {
         for (int x = 0; x < vAnswer.size(); x++) {
@@ -184,6 +214,13 @@ void wordleMain() {
             }
         }
     }
+
+    for (int g = 0; g < vAnswer.size(); g++) {
+        if (vGuess[g] == vAnswer[g]) {
+            colors[g] = GREEN;
+        }
+    }
+
     guesses.push_back(vGuess);
     vColors.push_back(colors);
     system("clear");
@@ -198,6 +235,11 @@ void wordleMain() {
     
     if (guess == answer) {
         cout << "\nWinner Winner Chicken Dinner!\n\n" << endl;
+        wins++;
+        currentStreak++;
+        if (currentStreak > longestStreak) {
+            longestStreak = currentStreak;
+        }
     } else {
         string print;
         for (int i = 0; i < answer.length(); i++) {
@@ -205,10 +247,39 @@ void wordleMain() {
         }
         cout << "\n\nThe word was: " << GREEN << print << RESET << endl;
         cout << "\nYou Did Great, Try again later!!\n\n" << endl;
+        currentStreak = 0;
     }
+
+    guessesTotal += (guessCount+1);    
+    winPercentage =  (float(wins/timesPlayed));
+    averageAttempts = (guessesTotal/timesPlayed);
 
     cout << "Press [enter] to continue";
     cin.ignore();
+    string dummy;
+    getline(cin, dummy);
+    system("clear");
+
+
+    updateStatsFile(timesPlayed, averageAttempts, winPercentage, currentStreak, longestStreak, wins, guessesTotal);
+}
+
+void statisticsSum() {
+    system("clear");
+    cout << "==============================" << endl;
+    cout << "      STATISTICS SUMMARY      " << endl;
+    cout << "==============================" << endl;
+    cout << setw(25) << left << "Times Played:" << setw(5) << right << timesPlayed << endl;
+    cout << setw(25) << left << "Average Attempts:" << setw(5) << right << averageAttempts << endl;
+    cout << setw(25) << left << "Win Percentage:" << setw(5) << right << setprecision(3) << winPercentage * 100 << "%" << endl;
+    cout << setw(25) << left << "Current Streak:" << setw(5) << right << currentStreak << endl;
+    cout << setw(25) << left << "Longest Streak:" << setw(5) << right << longestStreak << endl;
+
+    cout << "\n------------------------------" << endl;
+    cout << "WORD       ATTEMPTS        WIN" << endl;
+    cout << "------------------------------" << endl;
+
+    cout << "\n\nPress [enter] to continue";
     string dummy;
     getline(cin, dummy);
     system("clear");
