@@ -22,7 +22,7 @@ int main() {
             readStatsFromFile(timesPlayed, averageAttempts, winPercentage, currentStreak, longestStreak, wins, guessesTotal); 
             statisticsSum();
         } else if (option == "4") {
-            cout << "Reset statistics not implemented yet.\n" << endl;
+            resetStats();
         } else {
             cout << "Bye" << endl;
         }

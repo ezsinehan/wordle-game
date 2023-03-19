@@ -26,6 +26,8 @@ int longestStreak;
 float wins;
 int guessesTotal;
 
+
+
 void readStatsFromFile(int& timesPlayed, int& averageAttempts, float& winPercentage, int& currentStreak, int& longestStreak, float& wins, int& guessesTotal) {
     ifstream infile("stats.txt");
     if (infile) {
@@ -47,6 +49,59 @@ void updateStatsFile(int timesPlayed, int averageAttempts, float winPercentage, 
     }
 }
 
+void resetStats() {
+    system("clear");
+    timesPlayed = 0;
+    averageAttempts = 0;
+    winPercentage = 0.0f;
+    currentStreak = 0;
+    longestStreak = 0;
+    wins = 0.0f;
+    guessesTotal = 0;
+
+    std::ofstream statsFile("stats2.csv");
+    statsFile.close();
+    updateStatsFile(timesPlayed, averageAttempts, winPercentage, currentStreak, longestStreak, wins, guessesTotal);
+
+}
+
+void writeCSV(string& answer, int guessCount, string& status) {
+    
+    std::ofstream outfile("stats2.csv", std::ios_base::app);
+        string upperAnswer;
+    for (int i = 0; i < answer.length(); i++) {
+        upperAnswer += toupper(answer[i]);
+    }
+
+    outfile << upperAnswer << "," << guessCount+1 << "," << status << "\n";
+    
+    outfile.close();
+}
+
+void readCSV() {
+    std::ifstream infile("stats2.csv");
+    
+    std::vector<std::vector<std::string>> data;
+
+    std::string line;
+    while (std::getline(infile, line)) {
+        std::stringstream ss(line);
+        std::vector<std::string> row;
+        std::string value;
+        while (std::getline(ss, value, ',')) {
+            row.push_back(value);
+        }
+        data.push_back(row);
+    }
+
+    infile.close();
+
+    for (auto& row : data) {
+        std::cout << std::setw(18) << left << row[0];
+        std::cout << std::setw(7) << left << row[1];
+        std::cout << std::setw(5) << right << row[2] << "\n";
+    }
+}
 
 void displayMenu() {
     cout << "=========================" << endl;
@@ -135,6 +190,7 @@ void wordleMain() {
     string answer = randomWord();
     cout << answer << endl;
     string guess;
+    string status = "No";
     while(guess.length() != 5) {
         cout << "Enter Your Guess: ";
         cin >> guess;
@@ -240,6 +296,7 @@ vector<vector<char>> guesses;
         if (currentStreak > longestStreak) {
             longestStreak = currentStreak;
         }
+        status = "Yes";
     } else {
         string print;
         for (int i = 0; i < answer.length(); i++) {
@@ -260,6 +317,7 @@ vector<vector<char>> guesses;
     getline(cin, dummy);
     system("clear");
 
+    writeCSV(answer, guessCount, status);
 
     updateStatsFile(timesPlayed, averageAttempts, winPercentage, currentStreak, longestStreak, wins, guessesTotal);
 }
@@ -279,10 +337,13 @@ void statisticsSum() {
     cout << "WORD       ATTEMPTS        WIN" << endl;
     cout << "------------------------------" << endl;
 
+    readCSV();
+
     cout << "\n\nPress [enter] to continue";
     string dummy;
     getline(cin, dummy);
     system("clear");
 }
+
 
 #endif
