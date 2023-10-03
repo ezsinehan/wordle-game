@@ -27,7 +27,6 @@ float wins;
 int guessesTotal;
 
 
-
 void readStatsFromFile(int& timesPlayed, int& averageAttempts, float& winPercentage, int& currentStreak, int& longestStreak, float& wins, int& guessesTotal) {
     ifstream infile("stats.txt");
     if (infile) {
@@ -237,9 +236,7 @@ vector<vector<char>> guesses;
             cout << vColors[i][0] << "| " << static_cast<char>(toupper(guesses[i][0])) << " |" << vColors[i][1] << "| " << static_cast<char>(toupper(guesses[i][1])) << " |" << vColors[i][2] << "| " << static_cast<char>(toupper(guesses[i][2])) << " |" << vColors[i][3] << "| " << static_cast<char>(toupper(guesses[i][3])) << " |" << vColors[i][4] << "| " << static_cast<char>(toupper(guesses[i][4])) << " |" << RESET << endl;
             cout << vColors[i][0] << " --- " << vColors[i][1] << " --- " << vColors[i][2] << " --- " << vColors[i][3] << " --- " << vColors[i][4] << " --- " << RESET << endl;
         }   
-        // cout << colors[0] << " --- " << colors[1] << " --- " << colors[2] << " --- " << colors[3] << " --- " << colors[4] << " --- " << RESET << endl;
-        // cout << colors[0] << "| " << static_cast<char>(toupper(vGuess[0])) << " |" << colors[1] << "| " << static_cast<char>(toupper(vGuess[1])) << " |" << colors[2] << "| " << static_cast<char>(toupper(vGuess[2])) << " |" << colors[3] << "| " << static_cast<char>(toupper(vGuess[3])) << " |" << colors[4] << "| " << static_cast<char>(toupper(vGuess[4])) << " |" << RESET << endl;
-        // cout << colors[0] << " --- " << colors[1] << " --- " << colors[2] << " --- " << colors[3] << " --- " << colors[4] << " --- " << RESET << endl;
+
         guessCount++;
 
         guess = "";
@@ -285,9 +282,6 @@ vector<vector<char>> guesses;
         cout << vColors[i][0] << "| " << static_cast<char>(toupper(guesses[i][0])) << " |" << vColors[i][1] << "| " << static_cast<char>(toupper(guesses[i][1])) << " |" << vColors[i][2] << "| " << static_cast<char>(toupper(guesses[i][2])) << " |" << vColors[i][3] << "| " << static_cast<char>(toupper(guesses[i][3])) << " |" << vColors[i][4] << "| " << static_cast<char>(toupper(guesses[i][4])) << " |" << RESET << endl;
         cout << vColors[i][0] << " --- " << vColors[i][1] << " --- " << vColors[i][2] << " --- " << vColors[i][3] << " --- " << vColors[i][4] << " --- " << RESET << endl;
     }
-    // cout << vColors[guesses.size()-1][0] << " --- " << vColors[guesses.size()-1][1] << " --- " << vColors[guesses.size()-1][2] << " --- " << vColors[guesses.size()-1][3] << " --- " << vColors[guesses.size()-1][4] << " --- " << RESET << endl;
-    // cout << vColors[guesses.size()-1][0] << "| " << static_cast<char>(toupper(guesses[guesses.size()-1][0])) << " |" << vColors[guesses.size()-1][1] << "| " << static_cast<char>(toupper(guesses[guesses.size()-1][1])) << " |" << vColors[guesses.size()-1][2] << "| " << static_cast<char>(toupper(guesses[guesses.size()-1][2])) << " |" << vColors[guesses.size()-1][3] << "| " << static_cast<char>(toupper(guesses[guesses.size()-1][3])) << " |" << vColors[guesses.size()-1][4] << "| " << static_cast<char>(toupper(guesses[guesses.size()-1][4])) << " |" << RESET << endl;
-    // cout << vColors[guesses.size()-1][0] << " --- " << vColors[guesses.size()-1][1] << " --- " << vColors[guesses.size()-1][2] << " --- " << vColors[guesses.size()-1][3] << " --- " << vColors[guesses.size()-1][4] << " --- " << RESET << endl;
     
     if (guess == answer) {
         cout << "\nWinner Winner Chicken Dinner!\n\n" << endl;

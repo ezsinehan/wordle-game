@@ -23,6 +23,7 @@ int main() {
             statisticsSum();
         } else if (option == "4") {
             resetStats();
+            statisticsSum();
         } else {
             cout << "Bye" << endl;
         }
