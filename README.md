@@ -19,10 +19,3 @@ Educational Fun: Sharpen your word skills while having a great time.
 Clone this repository to your local machine.
 Run the game from your terminal.
 Start guessing words and watch as the code provides feedback.
-
-
-📁 Project Structure:
-
-main.py: The core game logic.
-utils.py: Utility functions for word processing and color coding.
-wordle_words.txt: Word list used by the game.
